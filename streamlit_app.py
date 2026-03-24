@@ -332,21 +332,38 @@ def bsheet_html(ek, state, active):
     label = ENTITY_DEFS[ek]["label"]
     assets = [(k,v) for k,v in e["assets"].items() if v != 0]
     liabs  = [(k,v) for k,v in e["liabilities"].items() if v != 0]
+    
     ta = sum(v for _,v in assets)
-    tl = sum(v for _,v in liabs)
+    tl = sum(v for _,v in liabs) # abs() kaldırıldı, net matematiksel toplam
+    
     if ta == 0 and tl == 0:
         return f'<div class="bsheet"><div class="bsheet-head"><span class="bsheet-name" style="color:#a0a0a0;">{label}</span></div><div class="bsheet-empty">empty</div></div>'
+    
     badge = '<span class="bsheet-active-badge">active</span>' if active else ""
     acls  = " active" if active else ""
+    
+    # ASSETS RENDER
     ar = "".join(f'<div class="bsheet-row"><span>{fname(k)}</span><span class="bval">${v}</span></div>' for k,v in assets) or '<div class="bsheet-row" style="color:#ccc;font-size:10px;">—</div>'
-    lr = "".join(f'<div class="bsheet-row"><span>{fname(k)}</span><span class="bval">${abs(v)}</span></div>' for k,v in liabs) or '<div class="bsheet-row" style="color:#ccc;font-size:10px;">—</div>'
+    
+    # LIABILITIES RENDER (Değişen kısım burası)
+    lr = ""
+    for k, v in liabs:
+        # Eğer bakiye eksi ise başına '-' koyuyoruz, değilse normal '$'
+        val_str = f"-${abs(v)}" if v < 0 else f"${v}"
+        lr += f'<div class="bsheet-row"><span>{fname(k)}</span><span class="bval">{val_str}</span></div>'
+    
+    if not lr: lr = '<div class="bsheet-row" style="color:#ccc;font-size:10px;">—</div>'
+
+    # Toplam kısmında da eksi kontrolü yapıyoruz
+    tl_str = f"-${abs(tl)}" if tl < 0 else f"${tl}"
+
     return f'''<div class="bsheet{acls}">
       <div class="bsheet-head"><span class="bsheet-name">{label}</span>{badge}</div>
       <div class="bsheet-body">
         <div class="bsheet-col bsheet-col-left"><div class="col-title-a">Assets</div>{ar}</div>
         <div class="bsheet-col"><div class="col-title-l">Liabilities</div>{lr}</div>
       </div>
-      <div class="bsheet-total"><span class="t-a">${ta}</span><span class="t-l">${abs(tl)}</span></div>
+      <div class="bsheet-total"><span class="t-a">${ta}</span><span class="t-l">{tl_str}</span></div>
     </div>'''
 
 def ms_chart(current_step):
