@@ -425,59 +425,60 @@ with st.sidebar:
 # ══════════════════════════════════════════════════════════════════════════════
 # MAIN
 # ══════════════════════════════════════════════════════════════════════════════
-# ─── MAIN ───────────────────────────────────────────────────────────────────
-step = st.session_state.step  # Mevcut aşama (0, 1, 2...)
-state = SNAPSHOTS[step]       # Bilançolar mevcut adıma göre yüklenir
+# CURRENT STATE: What is the current balance sheet?
+current_step = st.session_state.step
+state = SNAPSHOTS[current_step]
 
-# ÖNEMLİ: Eğer step 0 ise, henüz bir "işlem" yapılmamıştır.
-# Kullanıcıya "neyin yapılacağını" söyleyeceğiz ama grafiği gizleyeceğiz.
-is_start = (step == 0)
+# LOGIC: If we are at step 0, no transaction has happened yet.
+is_start = (current_step == 0)
 
 if not is_start:
-    # Gerçekleşen son işlemi göster (Step 1 yapıldıysa SCENARIOS[0])
-    sc = SCENARIOS[step - 1]
-    title_text = f"{sc['emoji']} {sc['title']}"
-    short_desc = sc['short']
-    tag_html = f'<span class="tag tag-{sc["tag_type"]}">{sc["tag"]}</span>'
+    # Get the data for the transaction that WAS JUST executed
+    sc = SCENARIOS[current_step - 1]
+    header_title = f"{sc['emoji']} {sc['title']}"
+    header_desc = sc['short']
+    header_tag = f'<span class="tag tag-{sc["tag_type"]}">{sc["tag"]}</span>'
     flow_content = flow_html(sc["flow"])
     insight_content = f'<div class="insight-bar">💡 {sc["insight"]}</div>'
+    display_step_num = current_step
 else:
-    # Başlangıç durumu (Daha butona basılmadı)
-    title_text = "💰 Para Oyunu'na Hoş Geldiniz!"
-    short_desc = "Sistemi başlatmak için 'Execute Step 1' butonuna tıklayın. Henüz piyasada para yok."
-    tag_html = '<span class="tag tag-blue">⏳ Hazır</span>'
-    # Grafik yerine boş veya bilgilendirici bir mesaj
-    flow_content = '<div style="font-size:12px;color:#a0a0a0;padding:10px;">Henüz bir işlem gerçekleşmedi. Akış için butona basın.</div>'
+    # Initial "Welcome" state before any button is pressed
+    header_title = "💰 Ready to Create Money?"
+    header_desc = "The system is at $0. Click 'Execute' to begin the first bookkeeping entry."
+    header_tag = '<span class="tag tag-blue">System Idle</span>'
+    flow_content = '<div style="font-size:12px;color:#a0a0a0;padding:10px;">No transaction flow to display yet. Execute a step to see the movement.</div>'
     insight_content = ""
+    display_step_num = 0
 
 # ── STEP HEADER ───────────────────────────────────────────────────────────────
 st.markdown(f"""
 <div class="step-header-card">
-  <span class="step-badge">Durum: {step} / 10</span>
-  <div class="step-title">{title_text}</div>
-  <div class="step-desc">{short_desc}</div>
-  {tag_html}
+  <span class="step-badge">Status: {display_step_num} / 10</span>
+  <div class="step-title">{header_title}</div>
+  <div class="step-desc">{header_desc}</div>
+  {header_tag}
 </div>
 """, unsafe_allow_html=True)
 
 # ── NAV BUTTONS ───────────────────────────────────────────────────────────────
 c1, c2, c3, _ = st.columns([1, 1.6, 1, 4])
 with c1:
-    st.button("← Back", on_click=go_prev, disabled=(step == 0), use_container_width=True)
+    st.button("← Back", on_click=go_prev, disabled=(current_step == 0), use_container_width=True)
+
 with c2:
-    if step >= 10:
-        st.button("✓ Completed!", disabled=True, use_container_width=True, type="primary")
+    if current_step >= 10:
+        st.button("✓ System Complete", disabled=True, use_container_width=True, type="primary")
     else:
-        # Eğer step 0 ise "Execute Step 1" der, basınca step 1 olur ve grafik gelir.
-        lbl = f"Execute Step {step + 1} →"
-        st.button(lbl, on_click=go_next, use_container_width=True, type="primary")
+        # The button always points to the NEXT step to be taken
+        btn_label = f"Execute Step {current_step + 1} →"
+        st.button(btn_label, on_click=go_next, use_container_width=True, type="primary")
+
 with c3:
     st.button("↺ Reset", on_click=reset, use_container_width=True)
 
 st.markdown("<div style='height:6px'></div>", unsafe_allow_html=True)
 
 # ── FLOW DIAGRAM ──────────────────────────────────────────────────────────────
-# Sadece işlem yapıldıysa gösteriyoruz
 st.markdown(f'<div class="flow-strip"><div class="flow-label">transaction flow</div>{flow_content}</div>', unsafe_allow_html=True)
 
 # ── INSIGHT ───────────────────────────────────────────────────────────────────
