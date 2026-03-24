@@ -349,29 +349,57 @@ def bsheet_html(ek, state, active):
       <div class="bsheet-total"><span class="t-a">${ta}</span><span class="t-l">${abs(tl)}</span></div>
     </div>'''
 
-def ms_chart(step):
-    visible = MS_HISTORY[:step+2]
-    labels  = [d["label"] for d in visible]
+def ms_chart(current_step):
+    # Fix: Only show data the user has actually 'executed'
+    # Step 0 shows index 0, Step 1 shows indices 0 and 1, etc.
+    visible = MS_HISTORY[:current_step + 1]
+    
+    labels = [d["label"] for d in visible]
     fig = go.Figure()
-    fig.add_trace(go.Bar(x=labels, y=[d["bank"] for d in visible], name="Bank Money (Deposits)", marker_color="#85B7EB"))
-    fig.add_trace(go.Bar(x=labels, y=[d["cash"] for d in visible], name="Cash in Circulation",   marker_color="#C084FC"))
+    
+    # Bank Money Bars
+    fig.add_trace(go.Bar(
+        x=labels, 
+        y=[d["bank"] for d in visible], 
+        name="Bank Money (Deposits)", 
+        marker_color="#85B7EB"
+    ))
+    
+    # Cash Bars
+    fig.add_trace(go.Bar(
+        x=labels, 
+        y=[d["cash"] for d in visible], 
+        name="Cash in Circulation",   
+        marker_color="#C084FC"
+    ))
+    
+    # Total Line
     fig.add_trace(go.Scatter(
-        x=labels, y=[d["total"] for d in visible], name="Total Money Supply",
+        x=labels, 
+        y=[d["total"] for d in visible], 
+        name="Total Money Supply",
         mode="lines+markers",
         line=dict(color="#EF9F27", width=3, shape="spline"),
         marker=dict(size=8, color="#EF9F27", line=dict(width=2, color="white")),
     ))
+    
+    # Annotation for the current total
     if visible:
         last = visible[-1]
-        fig.add_annotation(x=last["label"], y=last["total"], text=f"<b>${last['total']}</b>",
+        fig.add_annotation(
+            x=last["label"], y=last["total"], 
+            text=f"<b>${last['total']}</b>",
             showarrow=True, arrowhead=2, arrowcolor="#EF9F27", ax=0, ay=-36,
-            font=dict(size=13, color="#D97706"), bgcolor="white", bordercolor="#EF9F27", borderwidth=1.5, borderpad=4)
+            font=dict(size=13, color="#D97706"), 
+            bgcolor="white", bordercolor="#EF9F27", borderwidth=1.5, borderpad=4
+        )
+        
     fig.update_layout(
         barmode="stack", height=260,
         margin=dict(t=40, b=20, l=50, r=20),
         plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0, font=dict(size=11)),
-        yaxis=dict(range=[0,400], gridcolor="#f0f0f0", tickprefix="$", tickfont=dict(size=10)),
+        yaxis=dict(range=[0, 400], gridcolor="#f0f0f0", tickprefix="$", tickfont=dict(size=10)),
         xaxis=dict(tickfont=dict(size=10), gridcolor="rgba(0,0,0,0)"),
         bargap=0.3,
     )
@@ -522,8 +550,11 @@ if step == 9:
 st.divider()
 
 # ── CHART ─────────────────────────────────────────────────────────────────────
+st.divider()
 st.markdown("""
 <div style="font-size:14px;font-weight:700;margin-bottom:2px;">📈 Money Supply Over Time</div>
 <div style="font-size:11px;color:#a0a0a0;margin-bottom:4px;">Orange line = Total M1 · Blue bars = Bank deposits · Purple = Cash held by public</div>
 """, unsafe_allow_html=True)
-st.plotly_chart(ms_chart(step), use_container_width=True)
+
+# Pass the 'current_step' (0 to 10) so it matches the balance sheets
+st.plotly_chart(ms_chart(current_step), use_container_width=True)
