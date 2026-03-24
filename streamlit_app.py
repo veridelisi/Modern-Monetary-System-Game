@@ -552,7 +552,7 @@ with st.sidebar:
         '<div style="background:#F0F4FF;border-radius:10px;padding:12px 14px;">'
         '<div style="font-size:10px;color:#4B5563;line-height:1.7;margin-bottom:8px;">'
         'If you study or work with money, you need a framework grounded in how money actually works.<br><br>'
-        'If the model cannot explain creation, it cannot explain the economy.'
+        
         '</div>'
         '<a href="https://www.amazon.com/Modern-Monetary-System-Theory-Practice/dp/B0G584KJ73" '
         'target="_blank" style="color:#1E40AF;text-decoration:underline;font-weight:700;">'
