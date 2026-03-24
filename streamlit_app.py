@@ -305,7 +305,13 @@ if "step" not in st.session_state:
     st.session_state.step = 0
 
 def go_prev(): st.session_state.step = max(0, st.session_state.step - 1)
-def go_next(): st.session_state.step = min(9, st.session_state.step + 1)
+# Mevcut go_next() yerine şunları koy:
+def execute_step(amt):
+    # Bu fonksiyon hem miktarı işler hem bir sonraki adıma atar
+    # Mevcut state'i al, işlemi uygula ve bir sonrakine geç
+    st.session_state.step = min(9, st.session_state.step + 1)
+    # Not: SNAPSHOTS zaten önceden hesaplandığı için 
+    # sabit senaryoda miktarı butonla seçtirmek görsel bir onaydır.
 def reset():   st.session_state.step = 0
 
 # ─── RENDER HELPERS ───────────────────────────────────────────────────────────
@@ -511,16 +517,16 @@ with c1:
     st.button("← Back", on_click=go_prev, disabled=(current_step == 0), use_container_width=True)
 
 with c2:
-    if current_step >= 10:
-        st.button("✓ System Complete", disabled=True, use_container_width=True, type="primary")
+    if current_step < 9:
+        st.markdown('<div style="text-align:center; font-size:10px; font-weight:800; color:#666; margin-bottom:5px;">SELECT AMOUNT & EXECUTE</div>', unsafe_allow_html=True)
+        # 4 Miktar Butonu
+        b1, b2, b3, b4 = st.columns(4)
+        if b1.button("$100"): go_next()
+        if b2.button("$200"): go_next()
+        if b3.button("$300"): go_next()
+        if b4.button("$400"): go_next()
     elif current_step == 9:
-        # Instead of 'Execute Step 10', show 'Review System' or 'See Final Result'
-        btn_label = "🎓 Review Full System →"
-        st.button(btn_label, on_click=go_next, use_container_width=True, type="primary")
-    else:
-        # Standard execution label for steps 1-9
-        btn_label = f"Execute Step {current_step + 1} →"
-        st.button(btn_label, on_click=go_next, use_container_width=True, type="primary")
+        st.button("🎓 Review Full System →", on_click=go_next, use_container_width=True, type="primary")
 
 with c3:
     st.button("↺ Reset", on_click=reset, use_container_width=True)
