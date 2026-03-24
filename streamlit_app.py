@@ -191,7 +191,14 @@ SCENARIOS = [
         "short": "Customer A sends $50 to Customer B — both bank at Bank X.",
         "insight": "Same-bank payments are pure bookkeeping. No reserves move. Bank X acts as an internal clearing house. Money supply stays at $230 — money just changed hands.",
         "tag": "➡️ Transfer Only", "tag_type": "blue",
-        "transactions": [("Xbank","debit","CustomerADep",50),("Xbank","credit","CustomerBDep",50),("CustomerA","debit","NetWorth",-50),("CustomerA","credit","Deposits",50),("CustomerB","debit","Deposits",50),("CustomerB","credit","NetWorth",50)],
+        "transactions": [
+    ("Xbank", "debit", "CustomerADep", 50),   # Bank liability decreases
+    ("Xbank", "credit", "CustomerBDep", 50),  # Bank liability increases
+    ("CustomerA", "debit", "NetWorth", 50),   # Asset down, so Equity (Net Worth) must go down (Debit)
+    ("CustomerA", "credit", "Deposits", 50),  # Asset decreases
+    ("CustomerB", "debit", "Deposits", 50),   # Asset increases
+    ("CustomerB", "credit", "NetWorth", 50)   # Asset up, so Equity (Net Worth) must go up (Credit)
+]
         "flow": [
             {"id":"CustomerA","label":"Customer A","abbr":"CA","bg":"#FAEEDA","border":"#EF9F27","color":"#854F0B"},
             {"arrow":True,"amt":"$50","note":"via Bank X"},
