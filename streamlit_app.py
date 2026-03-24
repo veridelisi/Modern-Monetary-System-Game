@@ -425,31 +425,38 @@ with st.sidebar:
 # ══════════════════════════════════════════════════════════════════════════════
 # MAIN
 # ══════════════════════════════════════════════════════════════════════════════
-step = st.session_state.step  # Mevcut adım (0, 1, 2...)
+# ─── MAIN ───────────────────────────────────────────────────────────────────
+step = st.session_state.step  # Mevcut aşama (0, 1, 2...)
+state = SNAPSHOTS[step]       # Bilançolar mevcut adıma göre yüklenir
 
-# BİLANÇO DURUMU: Mevcut adımı göster (0 ise başlangıç, 1 ise 1. işlem sonrası)
-state = SNAPSHOTS[step] 
+# ÖNEMLİ: Eğer step 0 ise, henüz bir "işlem" yapılmamıştır.
+# Kullanıcıya "neyin yapılacağını" söyleyeceğiz ama grafiği gizleyeceğiz.
+is_start = (step == 0)
 
-# İŞLEM AKIŞI VE AÇIKLAMA: 
-# Eğer kullanıcı henüz bir işlem yapmadıysa (step=0), 
-# ona 1. senaryonun "ne olacağını" gösterelim ama bilançoyu henüz değiştirme.
-if step < len(SCENARIOS):
-    # 'sc' değişkeni, butona basınca GERÇEKLEŞECEK olan adımı temsil eder.
-    sc = SCENARIOS[step] 
-    
-    # Başlık kısmını "Sıradaki İşlem" veya "Mevcut Durum" olarak ayırabiliriz
-    title_prefix = "🎯 Sıradaki İşlem:" if step == 0 else f"{sc['emoji']} {sc['title']}"
+if not is_start:
+    # Gerçekleşen son işlemi göster (Step 1 yapıldıysa SCENARIOS[0])
+    sc = SCENARIOS[step - 1]
+    title_text = f"{sc['emoji']} {sc['title']}"
+    short_desc = sc['short']
+    tag_html = f'<span class="tag tag-{sc["tag_type"]}">{sc["tag"]}</span>'
+    flow_content = flow_html(sc["flow"])
+    insight_content = f'<div class="insight-bar">💡 {sc["insight"]}</div>'
 else:
-    sc = SCENARIOS[-1]
-    title_prefix = "🏁 Final Durumu"
+    # Başlangıç durumu (Daha butona basılmadı)
+    title_text = "💰 Para Oyunu'na Hoş Geldiniz!"
+    short_desc = "Sistemi başlatmak için 'Execute Step 1' butonuna tıklayın. Henüz piyasada para yok."
+    tag_html = '<span class="tag tag-blue">⏳ Hazır</span>'
+    # Grafik yerine boş veya bilgilendirici bir mesaj
+    flow_content = '<div style="font-size:12px;color:#a0a0a0;padding:10px;">Henüz bir işlem gerçekleşmedi. Akış için butona basın.</div>'
+    insight_content = ""
 
 # ── STEP HEADER ───────────────────────────────────────────────────────────────
 st.markdown(f"""
 <div class="step-header-card">
-  <span class="step-badge">Step {sc['id']} of 10</span>
-  <div class="step-title">{sc['emoji']} {sc['title']}</div>
-  <div class="step-desc">{sc['short']}</div>
-  <span class="tag tag-{sc['tag_type']}">{sc['tag']}</span>
+  <span class="step-badge">Durum: {step} / 10</span>
+  <div class="step-title">{title_text}</div>
+  <div class="step-desc">{short_desc}</div>
+  {tag_html}
 </div>
 """, unsafe_allow_html=True)
 
@@ -458,10 +465,10 @@ c1, c2, c3, _ = st.columns([1, 1.6, 1, 4])
 with c1:
     st.button("← Back", on_click=go_prev, disabled=(step == 0), use_container_width=True)
 with c2:
-    if step >= 10: # Toplam 10 senaryo + 1 başlangıç durumu
+    if step >= 10:
         st.button("✓ Completed!", disabled=True, use_container_width=True, type="primary")
     else:
-        # Eğer step 0 ise "Execute Step 1" yazmalı
+        # Eğer step 0 ise "Execute Step 1" der, basınca step 1 olur ve grafik gelir.
         lbl = f"Execute Step {step + 1} →"
         st.button(lbl, on_click=go_next, use_container_width=True, type="primary")
 with c3:
@@ -470,11 +477,12 @@ with c3:
 st.markdown("<div style='height:6px'></div>", unsafe_allow_html=True)
 
 # ── FLOW DIAGRAM ──────────────────────────────────────────────────────────────
-st.markdown(f'<div class="flow-strip"><div class="flow-label">transaction flow</div>{flow_html(sc["flow"])}</div>', unsafe_allow_html=True)
+# Sadece işlem yapıldıysa gösteriyoruz
+st.markdown(f'<div class="flow-strip"><div class="flow-label">transaction flow</div>{flow_content}</div>', unsafe_allow_html=True)
 
 # ── INSIGHT ───────────────────────────────────────────────────────────────────
-st.markdown(f'<div class="insight-bar">💡 {sc["insight"]}</div>', unsafe_allow_html=True)
-
+if insight_content:
+    st.markdown(insight_content, unsafe_allow_html=True)
 # ── BALANCE SHEETS ────────────────────────────────────────────────────────────
 st.markdown('<div style="font-size:10px;color:#a0a0a0;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:8px;">Live balance sheets — highlighted = active this step</div>', unsafe_allow_html=True)
 
