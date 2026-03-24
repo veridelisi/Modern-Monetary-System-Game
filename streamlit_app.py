@@ -386,8 +386,8 @@ with st.sidebar:
     st.markdown("---")
 
     step = st.session_state.step
-    ms   = MS_HISTORY[step + 1]
-    pms  = MS_HISTORY[step]
+    ms   = MS_HISTORY[step]
+    pms  = MS_HISTORY[max(0, step - 1)]
 
     st.markdown('<div style="font-size:10px;color:#a0a0a0;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:2px;">Progress</div>', unsafe_allow_html=True)
     st.markdown(dots_html(step), unsafe_allow_html=True)
@@ -425,9 +425,20 @@ with st.sidebar:
 # ══════════════════════════════════════════════════════════════════════════════
 # MAIN
 # ══════════════════════════════════════════════════════════════════════════════
-step  = st.session_state.step
-sc    = SCENARIOS[step]
-state = SNAPSHOTS[step + 1]
+step  = st.session_state.step  # Mevcut adım (0'dan başlar)
+
+# ÖNEMLİ DÜZELTME: 
+# Eğer step 0 ise, başlangıç durumunu (SNAPSHOTS[0]) göster.
+# Eğer step 1 ise, 1. işlemin sonucunu (SNAPSHOTS[1]) göster.
+state = SNAPSHOTS[step] 
+
+# Mevcut adımın içeriğini (başlık, açıklama vs.) bir sonraki işlemden almalıyız 
+# çünkü buton "Sıradaki işlemi yap" mesajını verir.
+if step < len(SCENARIOS):
+    sc = SCENARIOS[step]
+else:
+    # Tüm adımlar bittiğinde son senaryo bilgisini sabit tut
+    sc = SCENARIOS[-1]
 
 # ── STEP HEADER ───────────────────────────────────────────────────────────────
 st.markdown(f"""
@@ -444,10 +455,11 @@ c1, c2, c3, _ = st.columns([1, 1.6, 1, 4])
 with c1:
     st.button("← Back", on_click=go_prev, disabled=(step == 0), use_container_width=True)
 with c2:
-    if step == 9:
+    if step >= 10: # Toplam 10 senaryo + 1 başlangıç durumu
         st.button("✓ Completed!", disabled=True, use_container_width=True, type="primary")
     else:
-        lbl = f"Execute Step {sc['id']} →" if step == 0 else f"Next: Step {step+2} →"
+        # Eğer step 0 ise "Execute Step 1" yazmalı
+        lbl = f"Execute Step {step + 1} →"
         st.button(lbl, on_click=go_next, use_container_width=True, type="primary")
 with c3:
     st.button("↺ Reset", on_click=reset, use_container_width=True)
