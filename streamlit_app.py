@@ -513,8 +513,12 @@ with c1:
 with c2:
     if current_step >= 10:
         st.button("✓ System Complete", disabled=True, use_container_width=True, type="primary")
+    elif current_step == 9:
+        # Instead of 'Execute Step 10', show 'Review System' or 'See Final Result'
+        btn_label = "🎓 Review Full System →"
+        st.button(btn_label, on_click=go_next, use_container_width=True, type="primary")
     else:
-        # The button always points to the NEXT step to be taken
+        # Standard execution label for steps 1-9
         btn_label = f"Execute Step {current_step + 1} →"
         st.button(btn_label, on_click=go_next, use_container_width=True, type="primary")
 
