@@ -547,7 +547,21 @@ with st.sidebar:
         for key in ["step","ledger","ms_history","chosen","confirmed"]:
             del st.session_state[key]
         st.rerun()
-
+        st.markdown(
+        '<div style="margin-top:auto;padding-top:24px;">'
+        '<div style="background:#F0F4FF;border-radius:10px;padding:12px 14px;">'
+        '<div style="font-size:10px;color:#4B5563;line-height:1.7;margin-bottom:8px;">'
+        'If you study or work with money, you need a framework grounded in how money actually works.<br><br>'
+        'If the model cannot explain creation, it cannot explain the economy.'
+        '</div>'
+        '<a href="https://www.amazon.com/Modern-Monetary-System-Theory-Practice/dp/B0G584KJ73" '
+        'target="_blank" style="color:#1E40AF;text-decoration:underline;font-weight:700;">'
+        '📘 Modern Monetary System in Theory and Practice: Who Creates Money?</a>'
+        '</div>'
+        '</div>'
+        '</div>',
+        unsafe_allow_html=True
+    )
 # ─── MAIN CONTENT ─────────────────────────────────────────────────────────────
 step_i = st.session_state.step
 sc     = SCENARIOS[min(step_i, len(SCENARIOS)-1)]
