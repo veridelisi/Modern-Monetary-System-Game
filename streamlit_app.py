@@ -425,20 +425,23 @@ with st.sidebar:
 # ══════════════════════════════════════════════════════════════════════════════
 # MAIN
 # ══════════════════════════════════════════════════════════════════════════════
-step  = st.session_state.step  # Mevcut adım (0'dan başlar)
+step = st.session_state.step  # Mevcut adım (0, 1, 2...)
 
-# ÖNEMLİ DÜZELTME: 
-# Eğer step 0 ise, başlangıç durumunu (SNAPSHOTS[0]) göster.
-# Eğer step 1 ise, 1. işlemin sonucunu (SNAPSHOTS[1]) göster.
+# BİLANÇO DURUMU: Mevcut adımı göster (0 ise başlangıç, 1 ise 1. işlem sonrası)
 state = SNAPSHOTS[step] 
 
-# Mevcut adımın içeriğini (başlık, açıklama vs.) bir sonraki işlemden almalıyız 
-# çünkü buton "Sıradaki işlemi yap" mesajını verir.
+# İŞLEM AKIŞI VE AÇIKLAMA: 
+# Eğer kullanıcı henüz bir işlem yapmadıysa (step=0), 
+# ona 1. senaryonun "ne olacağını" gösterelim ama bilançoyu henüz değiştirme.
 if step < len(SCENARIOS):
-    sc = SCENARIOS[step]
+    # 'sc' değişkeni, butona basınca GERÇEKLEŞECEK olan adımı temsil eder.
+    sc = SCENARIOS[step] 
+    
+    # Başlık kısmını "Sıradaki İşlem" veya "Mevcut Durum" olarak ayırabiliriz
+    title_prefix = "🎯 Sıradaki İşlem:" if step == 0 else f"{sc['emoji']} {sc['title']}"
 else:
-    # Tüm adımlar bittiğinde son senaryo bilgisini sabit tut
     sc = SCENARIOS[-1]
+    title_prefix = "🏁 Final Durumu"
 
 # ── STEP HEADER ───────────────────────────────────────────────────────────────
 st.markdown(f"""
