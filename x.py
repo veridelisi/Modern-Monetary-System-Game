@@ -291,55 +291,22 @@ def compute_ms(state):
     cash = sum(state[e]["assets"].get("Cash",0) for e in ["CustomerA","CustomerB","CustomerC","Xbank","Ybank"])
     return bank, cash, bank + cash
 
+SNAPSHOTS = [init_state()]
+for sc in SCENARIOS:
+    SNAPSHOTS.append(apply_tx(SNAPSHOTS[-1], sc["transactions"]))
 
+MS_HISTORY = []
+for i, snap in enumerate(SNAPSHOTS):
+    bm, cm, tot = compute_ms(snap)
+    MS_HISTORY.append({"label": "Start" if i == 0 else f"Step {i}", "bank": bm, "cash": cm, "total": tot})
 
-# ─── SESSION STATE INITIALIZATION ─────────────────────────────────────────────
+# ─── SESSION STATE ────────────────────────────────────────────────────────────
 if "step" not in st.session_state:
     st.session_state.step = 0
-    # Başlangıç bilançosu
-    st.session_state.live_state = init_state()
-    # Geçmişi tutmak için (Geri tuşu çalışabilsin diye)
-    st.session_state.history = [deepcopy(st.session_state.live_state)]
-    # Grafik verisi
-    st.session_state.ms_history = [{"label": "Start", "bank": 0, "cash": 0, "total": 0}]
 
-# ─── DYNAMIC NAVIGATION FUNCTIONS ─────────────────────────────────────────────
-def go_prev():
-    if st.session_state.step > 0:
-        st.session_state.step -= 1
-        # Geçmişten o anki durumu geri yükle
-        st.session_state.live_state = deepcopy(st.session_state.history[st.session_state.step])
-
-def go_next(amt):
-    curr_idx = st.session_state.step
-    sc = SCENARIOS[curr_idx]
-    
-    # Senaryodaki işlemleri seçilen rakama göre güncelle (override amount)
-    current_txs = []
-    for entity, side, account, _ in sc["transactions"]:
-        current_txs.append((entity, side, account, amt))
-    
-    # Yeni durumu mevcut durumun üzerine hesapla
-    new_state = apply_tx(st.session_state.live_state, current_txs)
-    
-    # State'i güncelle ve kaydet
-    st.session_state.live_state = new_state
-    st.session_state.step += 1
-    
-    # Eğer bu adıma ilk kez geliyorsak geçmişe ekle
-    if len(st.session_state.history) <= st.session_state.step:
-        st.session_state.history.append(deepcopy(new_state))
-        bm, cm, tot = compute_ms(new_state)
-        st.session_state.ms_history.append({
-            "label": f"Step {st.session_state.step}", 
-            "bank": bm, "cash": cm, "total": tot
-        })
-
-def reset():
-    st.session_state.step = 0
-    st.session_state.live_state = init_state()
-    st.session_state.history = [deepcopy(st.session_state.live_state)]
-    st.session_state.ms_history = [{"label": "Start", "bank": 0, "cash": 0, "total": 0}]
+def go_prev(): st.session_state.step = max(0, st.session_state.step - 1)
+def go_next(): st.session_state.step = min(9, st.session_state.step + 1)
+def reset():   st.session_state.step = 0
 
 # ─── RENDER HELPERS ───────────────────────────────────────────────────────────
 def dots_html(current):
@@ -502,30 +469,31 @@ with st.sidebar:
 
 # ══════════════════════════════════════════════════════════════════════════════
 # MAIN
-# ─── MAIN ───────────────────────────────────────────────────────────────────
+# ══════════════════════════════════════════════════════════════════════════════
+# CURRENT STATE: What is the current balance sheet?
 current_step = st.session_state.step
-state = st.session_state.live_state # Artık sabit listeden değil, canlı state'den okuyoruz
+state = SNAPSHOTS[current_step]
 
-# Miktar Seçici (Hangi adımda ne sorsun?)
-selected_amount = 100 # Varsayılan
-if current_step < 9: # Son adımda sormaya gerek yok
-    if current_step in [0, 2, 3]: # Money Creation
-        opts = [100, 200, 300, 400]; lbl = "Select amount to CREATE:"
-    elif current_step in [5, 6]: # Transfers
-        opts = [20, 25, 30, 50]; lbl = "Select amount to TRANSFER:"
-    elif current_step == 1: # Reserves
-        opts = [100, 200, 300, 400]; lbl = "Select Reserves to provide:"
-    elif current_step in [7, 8]: # Cash
-        opts = [10, 20, 30, 40]; lbl = "Select Cash amount:"
-    elif current_step == 4: # Repay
-        opts = [5, 10, 15, 20]; lbl = "Select Repay amount:"
-    else: opts = None
+# LOGIC: If we are at step 0, no transaction has happened yet.
+is_start = (current_step == 0)
 
-    if opts:
-        st.markdown(f'<div style="font-size:12px; font-weight:bold; color:#1E1B4B;">{lbl}</div>', unsafe_allow_html=True)
-        selected_amount = st.select_slider("", options=opts, value=opts[0], key="amt_slider", label_visibility="collapsed")
-
-
+if not is_start:
+    # Get the data for the transaction that WAS JUST executed
+    sc = SCENARIOS[current_step - 1]
+    header_title = f"{sc['emoji']} {sc['title']}"
+    header_desc = sc['short']
+    header_tag = f'<span class="tag tag-{sc["tag_type"]}">{sc["tag"]}</span>'
+    flow_content = flow_html(sc["flow"])
+    insight_content = f'<div class="insight-bar">💡 {sc["insight"]}</div>'
+    display_step_num = current_step
+else:
+    # Initial "Welcome" state before any button is pressed
+    header_title = "💰 Ready to Create Money?"
+    header_desc = "The system is at $0. Click 'Execute' to begin the first bookkeeping entry."
+    header_tag = '<span class="tag tag-blue">System Idle</span>'
+    flow_content = '<div style="font-size:12px;color:#a0a0a0;padding:10px;">No transaction flow to display yet. Execute a step to see the movement.</div>'
+    insight_content = ""
+    display_step_num = 0
 
 # ── STEP HEADER ───────────────────────────────────────────────────────────────
 st.markdown(f"""
@@ -543,12 +511,16 @@ with c1:
     st.button("← Back", on_click=go_prev, disabled=(current_step == 0), use_container_width=True)
 
 with c2:
-    if current_step >= 9:
-        st.button("✓ System Complete", disabled=True, use_container_width=True)
+    if current_step >= 10:
+        st.button("✓ System Complete", disabled=True, use_container_width=True, type="primary")
+    elif current_step == 9:
+        # Instead of 'Execute Step 10', show 'Review System' or 'See Final Result'
+        btn_label = "🎓 Review Full System →"
+        st.button(btn_label, on_click=go_next, use_container_width=True, type="primary")
     else:
-        btn_label = "Execute Step →" if current_step < 8 else "Review System →"
-        # DİKKAT: args=[selected_amount] ekledik
-        st.button(btn_label, on_click=go_next, args=[selected_amount], use_container_width=True, type="primary")
+        # Standard execution label for steps 1-9
+        btn_label = f"Execute Step {current_step + 1} →"
+        st.button(btn_label, on_click=go_next, use_container_width=True, type="primary")
 
 with c3:
     st.button("↺ Reset", on_click=reset, use_container_width=True)
@@ -607,5 +579,3 @@ st.markdown("""
 
 # Pass the 'current_step' (0 to 10) so it matches the balance sheets
 st.plotly_chart(ms_chart(current_step), use_container_width=True)
-# ms_chart fonksiyonu içinde:
-visible = st.session_state.ms_history[:current_step + 1]
