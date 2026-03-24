@@ -526,8 +526,12 @@ with st.sidebar:
         f'<div class="sb-metric-label">Money Supply (M1)</div>'
         f'<div class="sb-metric-val">${tot}</div>'
         f'{delta_html}'
-        f'<div style="margin-top:6px;font-size:10px;color:#6b6b6b;">Bank Deposits: <b>${bm}</b></div>'
-        f'<div style="font-size:10px;color:#6b6b6b;">Cash in Circ.: <b>${cm}</b></div>'
+        f'<div style="margin-top:8px;display:flex;justify-content:space-between;align-items:center;background:#EEF6FF;border-radius:6px;padding:5px 8px;">'
+        f'<span style="font-size:10px;color:#3B6D9E;">🏦 Bank Deposits</span>'
+        f'<span style="font-size:13px;font-weight:800;color:#185FA5;">${bm}</span></div>'
+        f'<div style="margin-top:4px;display:flex;justify-content:space-between;align-items:center;background:#F5F0FF;border-radius:6px;padding:5px 8px;">'
+        f'<span style="font-size:10px;color:#7C3AED;">💵 Cash in Circ.</span>'
+        f'<span style="font-size:13px;font-weight:800;color:#6D28D9;">${cm}</span></div>'
         f'</div>',
         unsafe_allow_html=True
     )
