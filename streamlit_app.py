@@ -547,7 +547,7 @@ with st.sidebar:
         for key in ["step","ledger","ms_history","chosen","confirmed"]:
             del st.session_state[key]
         st.rerun()
-        st.markdown(
+    st.markdown(
         '<div style="margin-top:auto;padding-top:24px;">'
         '<div style="background:#F0F4FF;border-radius:10px;padding:12px 14px;">'
         '<div style="font-size:10px;color:#4B5563;line-height:1.7;margin-bottom:8px;">'
