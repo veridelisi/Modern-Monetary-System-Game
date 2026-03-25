@@ -485,18 +485,28 @@ def ms_chart(history, height=240):
                              marker=dict(size=8, color="#EF9F27", line=dict(width=2, color="white"))))
     if history:
         last = history[-1]
-        fig.add_annotation(x=last["label"], y=last["total"],
-                           text=f"<b>${last['total']}</b>", showarrow=True,
-                           arrowhead=2, arrowcolor="#EF9F27", ax=0, ay=-36,
-                           font=dict(size=13, color="#D97706"),
-                           bgcolor="white", bordercolor="#EF9F27", borderwidth=1.5, borderpad=4)
+        fig.add_annotation(
+            x=last["label"], y=last["total"],
+            text=f"<b>${last['total']}</b>",
+            showarrow=False,
+            yshift=14,
+            font=dict(size=12, color="#D97706"),
+            bgcolor="white",
+            bordercolor="#EF9F27",
+            borderwidth=1,
+            borderpad=3,
+        )
     fig.update_layout(
         barmode="stack", height=height,
         margin=dict(t=30, b=20, l=40, r=20),
         plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0, font=dict(size=11)),
         xaxis=dict(showgrid=False, tickfont=dict(size=10)),
-        yaxis=dict(showgrid=True, gridcolor="rgba(0,0,0,0.05)", tickfont=dict(size=10)),
+        yaxis=dict(
+            showgrid=True, gridcolor="rgba(0,0,0,0.05)", tickfont=dict(size=10),
+            range=[0, 1500],
+        ),
+        bargap=0.5,
     )
     return fig
 
@@ -506,9 +516,10 @@ with st.sidebar:
     sc = SCENARIOS[min(step_i, len(SCENARIOS)-1)]
 
     # Progress
+    display_step = min(step_i + 1, len(SCENARIOS))
     st.markdown(f'<div class="sb-metric"><div class="sb-metric-label">Progress</div>'
-                f'<div class="sb-metric-val">Step {step_i+1} / {len(SCENARIOS)}</div>'
-                f'{dots_html(step_i)}</div>', unsafe_allow_html=True)
+            f'<div class="sb-metric-val">Step {display_step} / {len(SCENARIOS)}</div>'
+            f'{dots_html(min(step_i, len(SCENARIOS)-1))}</div>', unsafe_allow_html=True)
 
     # M1
     bm, cm, tot = compute_ms(st.session_state.ledger)
