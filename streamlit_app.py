@@ -603,19 +603,61 @@ if step_i >= len(SCENARIOS):
     st.plotly_chart(ms_chart(st.session_state.ms_history, height=300), use_container_width=True)
 
     # Choices recap
+    # Choices recap
     st.markdown("### 🎯 Your Choices")
-    cols = st.columns(5)
+
+    EFFECT_MAP = {
+        1: ("Bank X → Customer A",    "loan",     "delta_pos"),
+        2: ("Central Bank → Banks",   "reserves", "delta-neu"),
+        3: ("Bank Y → Customer C",    "loan",     "delta_pos"),
+        4: ("Bank X → Customer B",    "loan",     "delta_pos"),
+        5: ("Customer B repays",      "repayment","delta_neg"),
+        6: ("Cust A → Cust B (same)", "transfer", "delta-neu"),
+        7: ("Cust C → Cust A (cross)","transfer", "delta-neu"),
+        8: ("Banks withdraw cash",    "form swap","delta-neu"),
+        9: ("Cust A withdraws cash",  "form swap","delta-neu"),
+    }
+
+    EFFECT_LABEL = {
+        "loan":     ("💚 Money Created",  "#EAF3DE", "#3B6D11"),
+        "reserves": ("➡️ No M1 Change",  "#E6F1FB", "#185FA5"),
+        "repayment":("🔴 Money Destroyed","#FCEBEB", "#A32D2D"),
+        "transfer": ("➡️ Transfer Only", "#E6F1FB", "#185FA5"),
+        "form swap":("➡️ Form Change",   "#E6F1FB", "#185FA5"),
+    }
+
+    rows_html = ""
     for i, sc_item in enumerate(SCENARIOS[:9]):
-        with cols[i % 5]:
-            amt = st.session_state.chosen.get(i, "—")
-            st.markdown(
-                f'<div style="background:#f7f7f5;border:0.5px solid rgba(0,0,0,0.1);border-radius:8px;padding:10px;text-align:center;">'
-                f'<div style="font-size:20px;">{sc_item["emoji"]}</div>'
-                f'<div style="font-size:10px;color:#6b6b6b;margin:3px 0;">Step {sc_item["id"]}</div>'
-                f'<div style="font-size:16px;font-weight:800;color:#1a1a1a;">${amt}</div>'
-                f'</div>',
-                unsafe_allow_html=True
-            )
+        amt   = st.session_state.chosen.get(i, "—")
+        desc, etype, _ = EFFECT_MAP[sc_item["id"]]
+        elabel, ebg, ecolor = EFFECT_LABEL[etype]
+        amt_str = f"${amt}" if amt != "—" else "—"
+        rows_html += f"""
+        <tr style="border-bottom:0.5px solid rgba(0,0,0,0.07);">
+        <td style="padding:8px 10px;font-size:13px;">{sc_item['emoji']} Step {sc_item['id']}</td>
+        <td style="padding:8px 10px;font-size:12px;color:#4B5563;">{desc}</td>
+        <td style="padding:8px 10px;font-size:14px;font-weight:700;color:#1a1a1a;">{amt_str}</td>
+        <td style="padding:8px 10px;">
+            <span style="background:{ebg};color:{ecolor};font-size:10px;font-weight:700;
+            padding:2px 8px;border-radius:20px;">{elabel}</span>
+        </td>
+        </tr>"""
+
+    st.markdown(f"""
+    <table style="width:100%;border-collapse:collapse;background:white;
+    border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;overflow:hidden;">
+    <thead>
+        <tr style="background:#f7f7f5;border-bottom:1px solid rgba(0,0,0,0.1);">
+        <th style="padding:8px 10px;text-align:left;font-size:10px;color:#6b6b6b;text-transform:uppercase;letter-spacing:0.5px;">Step</th>
+        <th style="padding:8px 10px;text-align:left;font-size:10px;color:#6b6b6b;text-transform:uppercase;letter-spacing:0.5px;">Transaction</th>
+        <th style="padding:8px 10px;text-align:left;font-size:10px;color:#6b6b6b;text-transform:uppercase;letter-spacing:0.5px;">Amount</th>
+        <th style="padding:8px 10px;text-align:left;font-size:10px;color:#6b6b6b;text-transform:uppercase;letter-spacing:0.5px;">Effect</th>
+        </tr>
+    </thead>
+    <tbody>{rows_html}</tbody>
+    </table>
+    """, unsafe_allow_html=True)
+            
 
     if st.button("↺ Play Again", type="primary", use_container_width=True):
         for key in ["step","ledger","ms_history","chosen","confirmed"]:
