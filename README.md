@@ -30,9 +30,24 @@ Instead of long theoretical explanations, the game helps users learn by playing.
 This game is based on the ideas developed in the book:
 
 **_Modern Monetary System in Theory and Practice: Who Creates Money?_**  
-**Author:** Engin Yılmaz
+by **Engin Yılmaz**
 
-The goal is to make the core arguments of the book more interactive, accessible, and engaging.
+💡 If you want to go beyond the simulation and understand how the monetary system really works:
+
+👉 **[Get the book on Amazon](https://www.amazon.com/Modern-Monetary-System-Theory-Practice/dp/B0G584KJ73)**
+
+---
+
+### 🚀 Why this book?
+
+- Explains **who actually creates money**
+- Breaks down **banking & monetary system myths**
+- Built on **real-world balance sheet logic**
+- Designed for **economists, students, and practitioners**
+
+---
+
+> "If you study money, you need a framework grounded in reality — not textbooks."
 
 ---
 
