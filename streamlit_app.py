@@ -134,10 +134,10 @@ html, body, [class*="css"], .stApp {
 
 # ─── AMOUNT OPTION SETS ───────────────────────────────────────────────────────
 LOAN_OPTS     = [100, 200, 300, 400]
-RESERVE_OPTS  = [100, 200, 300, 400]
-TRANSFER_OPTS = [20, 25, 30, 50]
-CASH_OPTS     = [40, 50, 100, 150]
-CASH_OPTS2    = [10, 20, 30, 40]
+RESERVE_OPTS  = [200, 300, 400, 500]
+TRANSFER_OPTS = [5, 10, 15, 20]
+CASH_OPTS     = [10, 20, 30, 40]
+CASH_OPTS2    = [5, 10, 15, 20]
 REPAY_OPTS    = [5, 10, 15, 20]
 
 # ─── SCENARIOS ────────────────────────────────────────────────────────────────
