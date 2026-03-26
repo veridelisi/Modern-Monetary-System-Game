@@ -3,7 +3,7 @@ import plotly.graph_objects as go
 from copy import deepcopy
 
 st.set_page_config(
-    page_title="💰 Money Creation Gamee",
+    page_title="💰 Money Creation Gameeeeeeeeee",
     page_icon="💰",
     layout="wide",
     initial_sidebar_state="expanded"
