@@ -502,7 +502,7 @@ def ms_chart(history, height=240):
         hovermode=False,
         height=height,
         dragmode=False,  # Dokunmatik ekranlarda kaymayı engeller
-        hovermode="x",   # Fareyle üzerine gelince sadece o x eksenini gösterir
+        
         margin=dict(t=50, b=10, l=30, r=10), # Mobil için optimize edilmiş boşluklar
         plot_bgcolor="rgba(0,0,0,0)", 
         paper_bgcolor="rgba(0,0,0,0)",
