@@ -574,38 +574,28 @@ with st.sidebar:
         for key in ["step","ledger","ms_history","chosen","confirmed"]:
             del st.session_state[key]
         st.rerun()
-
+        
     st.sidebar.markdown(
     """
     <style>
     .book-card {
-        background: #fcfcfc;
+        background: #ffffff;
         border: 1px solid #e5e7eb;
         border-radius: 12px;
-        padding: 18px;
+        padding: 16px;
         margin-top: 20px;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        display: flex; /* İçeriği esnek bir şekilde dizmek için */
-        flex-direction: column; /* Öğeleri dikeyde sıralar */
-        align-items: center; /* Resim ve başlığı merkeze hizalar */
-    }
-    .book-cover {
-        width: 100px; /* Kapak resminin genişliğini sidebar'a uygun sabitler */
-        height: auto;
-        border-radius: 6px; /* Hafif yuvarlak köşeler */
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        margin-bottom: 12px;
         transition: transform 0.2s ease;
     }
-    .book-card:hover .book-cover {
-        transform: scale(1.03); /* Üzerine gelince resmi hafif büyütür */
+    .book-card:hover {
+        border-color: #3b82f6;
+        transform: translateY(-2px);
     }
     .book-text {
-        font-size: 11px;
-        color: #6b7280;
+        font-size: 12px;
+        color: #4b5563;
         line-height: 1.5;
         margin-bottom: 12px;
-        text-align: center; /* Alıntıyı ortalar */
         font-style: italic;
     }
     .book-link {
@@ -615,7 +605,6 @@ with st.sidebar:
         font-size: 13px;
         display: block;
         line-height: 1.4;
-        text-align: center; /* Başlığı ortalar */
     }
     .book-link:hover {
         text-decoration: underline;
@@ -624,10 +613,6 @@ with st.sidebar:
     </style>
     
     <div class="book-card">
-        <a href="https://www.amazon.com/Modern-Monetary-System-Theory-Practice/dp/B0G584KJ73" target="_blank">
-            <img src="images/book.png" class="book-cover" alt="Modern Monetary System Book Cover" />
-        </a>
-        
         <div class="book-text">
             "If you study or work with money, you need a framework grounded in how money actually works."
         </div>
