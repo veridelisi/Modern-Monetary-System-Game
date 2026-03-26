@@ -498,16 +498,30 @@ def ms_chart(history, height=240):
             borderpad=3,
         )
     fig.update_layout(
-        barmode="stack", height=height,
-        margin=dict(t=30, b=20, l=40, r=20),
-        plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0, font=dict(size=11)),
-        xaxis=dict(showgrid=False, tickfont=dict(size=10)),
-        yaxis=dict(
-            showgrid=True, gridcolor="rgba(0,0,0,0.05)", tickfont=dict(size=10),
-            range=[0, 1500],
+        barmode="stack", 
+        height=height,
+        dragmode=False,  # Dokunmatik ekranlarda kaymayı engeller
+        hovermode="x",   # Fareyle üzerine gelince sadece o x eksenini gösterir
+        margin=dict(t=50, b=10, l=30, r=10), # Mobil için optimize edilmiş boşluklar
+        plot_bgcolor="rgba(0,0,0,0)", 
+        paper_bgcolor="rgba(0,0,0,0)",
+        legend=dict(
+            orientation="h", 
+            yanchor="bottom", 
+            y=1.1, # Başlıklarla çakışmaması için biraz daha yukarı
+            xanchor="left", 
+            x=0, 
+            font=dict(size=10) # Mobilde daha okunaklı küçük font
         ),
-        bargap=0.5,
+        xaxis=dict(showgrid=False, tickfont=dict(size=10), fixedrange=True), # Zoom'u tamamen kapatır
+        yaxis=dict(
+            showgrid=True, 
+            gridcolor="rgba(0,0,0,0.05)", 
+            tickfont=dict(size=10),
+            range=[0, 1500],
+            fixedrange=True # Y ekseni zoom'unu kapatır
+        ),
+        bargap=0.4,
     )
     return fig
 
