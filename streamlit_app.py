@@ -477,11 +477,11 @@ def ms_chart(history, height=240):
     labels = [d["label"] for d in history]
     fig = go.Figure()
     fig.add_trace(go.Bar(x=labels, y=[d["bank"] for d in history],
-                         name="Bank Deposits", marker_color="#85B7EB"))
+                         name="Bank Deposits", hoverinfo="none", marker_color="#85B7EB"))
     fig.add_trace(go.Bar(x=labels, y=[d["cash"] for d in history],
                          name="Cash in Circulation", marker_color="#C084FC"))
     fig.add_trace(go.Scatter(x=labels, y=[d["total"] for d in history],
-                             name="Total M1", mode="lines+markers",
+                             name="Total M1",hoverinfo="none", mode="lines+markers",
                              line=dict(color="#EF9F27", width=3, shape="spline"),
                              marker=dict(size=8, color="#EF9F27", line=dict(width=2, color="white"))))
     if history:
@@ -499,6 +499,7 @@ def ms_chart(history, height=240):
         )
     fig.update_layout(
         barmode="stack", 
+        hovermode=False,
         height=height,
         dragmode=False,  # Dokunmatik ekranlarda kaymayı engeller
         hovermode="x",   # Fareyle üzerine gelince sadece o x eksenini gösterir
