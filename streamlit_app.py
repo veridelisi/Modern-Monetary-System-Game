@@ -136,7 +136,8 @@ html, body, [class*="css"], .stApp {
 LOAN_OPTS     = [100, 200, 300, 400]
 RESERVE_OPTS  = [100, 200, 300, 400]
 TRANSFER_OPTS = [20, 25, 30, 50]
-CASH_OPTS     = [10, 20, 30, 40]
+CASH_OPTS     = [40, 50, 100, 150]
+CASH_OPTS2    = [10, 20, 30, 40]
 REPAY_OPTS    = [5, 10, 15, 20]
 
 # ─── SCENARIOS ────────────────────────────────────────────────────────────────
@@ -144,7 +145,7 @@ REPAY_OPTS    = [5, 10, 15, 20]
 SCENARIOS = [
     {
         "id": 1, "emoji": "✨",
-        "title": "Bank X Creates Money — From Nothingg!",
+        "title": "Bank X Creates Money — From Nothing!",
         "short": "Bank X grants Customer A a loan, writing new money into existence.",
         "insight": "Banks don't lend existing money — they create brand new money when they make loans. This is called endogenous money creation. The economy grew from $0 with a single bookkeeping entry.",
         "tag": "💚 Money Created", "tag_type": "green",
@@ -237,7 +238,7 @@ SCENARIOS = [
         "insight": "This converts bank money into central bank money — but total M1 stays the same. Bank X needed physical cash on hand (from Step 8) to do this. It's a format swap, not money creation.",
         "tag": "➡️ Form Change Only", "tag_type": "blue",
         "choice_type": "cash",
-        "choice_opts": CASH_OPTS,
+        "choice_opts": CASH_OPTS2,
         "choice_label": "How much cash does Customer A withdraw?",
         "involved": ["Xbank", "CustomerA"],
     },
