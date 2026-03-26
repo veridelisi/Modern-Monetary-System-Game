@@ -3,7 +3,7 @@ import plotly.graph_objects as go
 from copy import deepcopy
 
 st.set_page_config(
-    page_title="💰 Money Creation Gameeeeeeeeee",
+    page_title="💰 Money Creation Game",
     page_icon="💰",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -144,7 +144,7 @@ REPAY_OPTS    = [5, 10, 15, 20]
 SCENARIOS = [
     {
         "id": 1, "emoji": "✨",
-        "title": "Bank X Creates Money — From Nothing!",
+        "title": "Bank X Creates Money — From Nothingg!",
         "short": "Bank X grants Customer A a loan, writing new money into existence.",
         "insight": "Banks don't lend existing money — they create brand new money when they make loans. This is called endogenous money creation. The economy grew from $0 with a single bookkeeping entry.",
         "tag": "💚 Money Created", "tag_type": "green",
