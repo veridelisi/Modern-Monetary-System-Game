@@ -574,21 +574,56 @@ with st.sidebar:
         for key in ["step","ledger","ms_history","chosen","confirmed"]:
             del st.session_state[key]
         st.rerun()
-    st.markdown(
-        '<div style="margin-top:auto;padding-top:24px;">'
-        '<div style="background:#F0F4FF;border-radius:10px;padding:12px 14px;">'
-        '<div style="font-size:10px;color:#4B5563;line-height:1.7;margin-bottom:8px;">'
-        'If you study or work with money, you need a framework grounded in how money actually works.<br><br>'
         
-        '</div>'
-        '<a href="https://www.amazon.com/Modern-Monetary-System-Theory-Practice/dp/B0G584KJ73" '
-        'target="_blank" style="color:#1E40AF;text-decoration:underline;font-weight:700;">'
-        '📘 Modern Monetary System in Theory and Practice: Who Creates Money?</a>'
-        '</div>'
-        '</div>'
-        '</div>',
-        unsafe_allow_html=True
-    )
+    st.sidebar.markdown(
+    """
+    <style>
+    .book-card {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 16px;
+        margin-top: 20px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s ease;
+    }
+    .book-card:hover {
+        border-color: #3b82f6;
+        transform: translateY(-2px);
+    }
+    .book-text {
+        font-size: 12px;
+        color: #4b5563;
+        line-height: 1.5;
+        margin-bottom: 12px;
+        font-style: italic;
+    }
+    .book-link {
+        color: #1e40af;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 13px;
+        display: block;
+        line-height: 1.4;
+    }
+    .book-link:hover {
+        text-decoration: underline;
+        color: #2563eb;
+    }
+    </style>
+    
+    <div class="book-card">
+        <div class="book-text">
+            "If you study or work with money, you need a framework grounded in how money actually works."
+        </div>
+        <a href="https://www.amazon.com/Modern-Monetary-System-Theory-Practice/dp/B0G584KJ73" 
+           target="_blank" class="book-link">
+           📘 Modern Monetary System in Theory and Practice: Who Creates Money?
+        </a>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 # ─── MAIN CONTENT ─────────────────────────────────────────────────────────────
 step_i = st.session_state.step
 sc     = SCENARIOS[min(step_i, len(SCENARIOS)-1)]
