@@ -826,3 +826,52 @@ with col_chart:
             '</div>',
             unsafe_allow_html=True
         )
+    st.markdown(
+    """
+    <style>
+    .book-card {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 16px;
+        margin-top: 20px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s ease;
+    }
+    .book-card:hover {
+        border-color: #3b82f6;
+        transform: translateY(-2px);
+    }
+    .book-text {
+        font-size: 12px;
+        color: #4b5563;
+        line-height: 1.5;
+        margin-bottom: 12px;
+        font-style: italic;
+    }
+    .book-link {
+        color: #1e40af;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 13px;
+        display: block;
+        line-height: 1.4;
+    }
+    .book-link:hover {
+        text-decoration: underline;
+        color: #2563eb;
+    }
+    </style>
+    
+    <div class="book-card">
+        <div class="book-text">
+            "If you study or work with money, you need a framework grounded in how money actually works."
+        </div>
+        <a href="https://www.amazon.com/Modern-Monetary-System-Theory-Practice/dp/B0G584KJ73" 
+           target="_blank" class="book-link">
+           📘 Modern Monetary System in Theory and Practice: Who Creates Money?
+        </a>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
