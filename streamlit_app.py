@@ -826,8 +826,8 @@ with col_chart:
             '</div>',
             unsafe_allow_html=True
         )
- import streamlit as st
-import base64
+ 
+    import base64
 
 def get_base64_of_bin_file(bin_file):
     with open(bin_file, 'rb') as f:
