@@ -826,51 +826,92 @@ with col_chart:
             '</div>',
             unsafe_allow_html=True
         )
-    st.markdown(
-    """
+ import streamlit as st
+import base64
+
+def get_base64_of_bin_file(bin_file):
+    with open(bin_file, 'rb') as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
+
+try:
+    img_base64 = get_base64_of_bin_file("images/book.png")
+    img_html = f'data:image/png;base64,{img_base64}'
+except:
+    img_html = ""
+
+st.markdown(
+    f"""
     <style>
-    .book-card {
-        background: #ffffff;
-        border: 1px solid #e5e7eb;
-        border-radius: 12px;
-        padding: 16px;
-        margin-top: 20px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        transition: transform 0.2s ease;
-    }
-    .book-card:hover {
-        border-color: #3b82f6;
-        transform: translateY(-2px);
-    }
-    .book-text {
-        font-size: 12px;
+    /* Masaüstü için Sabit Pozisyon (Sağ Alt) */
+    @media (min-width: 1024px) {{
+        .floating-book-card {{
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 280px;
+            z-index: 1000;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }}
+    }}
+
+    /* Mobil için Normal Akış (En Alt) */
+    @media (max-width: 1023px) {{
+        .floating-book-card {{
+            margin: 20px auto;
+            width: 90%;
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }}
+    }}
+
+    .mini-cover {{
+        width: 60px;
+        height: auto;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }}
+
+    .mini-text {{
+        font-size: 11px;
         color: #4b5563;
-        line-height: 1.5;
-        margin-bottom: 12px;
-        font-style: italic;
-    }
-    .book-link {
+        line-height: 1.3;
+    }}
+
+    .mini-link {{
+        display: block;
+        margin-top: 5px;
         color: #1e40af;
         text-decoration: none;
-        font-weight: 600;
-        font-size: 13px;
-        display: block;
-        line-height: 1.4;
-    }
-    .book-link:hover {
-        text-decoration: underline;
-        color: #2563eb;
-    }
+        font-weight: 700;
+        font-size: 11px;
+    }}
     </style>
     
-    <div class="book-card">
-        <div class="book-text">
-            "If you study or work with money, you need a framework grounded in how money actually works."
-        </div>
-        <a href="https://www.amazon.com/Modern-Monetary-System-Theory-Practice/dp/B0G584KJ73" 
-           target="_blank" class="book-link">
-           📘 Modern Monetary System in Theory and Practice: Who Creates Money?
+    <div class="floating-book-card">
+        <a href="https://www.amazon.com/Modern-Monetary-System-Theory-Practice/dp/B0G584KJ73" target="_blank">
+            <img src="{img_html}" class="mini-cover">
         </a>
+        <div>
+            <div class="mini-text">
+                "If you study or work with money, you need this framework."
+            </div>
+            <a href="https://www.amazon.com/Modern-Monetary-System-Theory-Practice/dp/B0G584KJ73" 
+               target="_blank" class="mini-link">
+               Modern Monetary System →
+            </a>
+        </div>
     </div>
     """,
     unsafe_allow_html=True
