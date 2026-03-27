@@ -827,6 +827,10 @@ with col_chart:
             unsafe_allow_html=True
         )
  
+
+
+
+ 
     import base64
 
 def get_base64_of_bin_file(bin_file):
