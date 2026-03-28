@@ -104,13 +104,6 @@ html, body, [class*="css"], .stApp {
 .bsheet-total { padding: 4px 9px; border-top: 0.5px solid rgba(0,0,0,0.08); display: flex; justify-content: space-between; font-size: 10px; font-weight: 700; background: #f7f7f5; }
 .t-a { color: #185FA5; }
 .t-l { color: #A32D2D; }
-            
-.flow-pair {
-    display: flex;
-    flex-direction: row;   /* column değil row */
-    align-items: center;
-    gap: 8px;
-}         
 
 .insight-bar { background: #EAF3DE; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #3B6D11; line-height: 1.6; margin: 4px 0 10px 0; }
 
@@ -340,17 +333,14 @@ def build_flow(sc_id, amt):
         ]
     elif sc_id == 7:
         return [
-    {"pair": True, "nodes": [
-        {"id":"CustomerC","label":"Customer C","abbr":"CC","bg":"#FBEAF0","border":"#D4537E","color":"#72243E"},
-        {"id":"Ybank","label":"Bank Y","abbr":"BY","bg":"#EAF3DE","border":"#1D9E75","color":"#3B6D11"},
-    ]},
-    {"arrow":True,"amt":f"{a} deposits & reserves","note":""},
-    {"pair": True, "nodes": [
-        {"id":"CustomerA","label":"Customer A","abbr":"CA","bg":"#FAEEDA","border":"#EF9F27","color":"#854F0B"},
-        {"id":"Xbank","label":"Bank X","abbr":"BX","bg":"#E6F1FB","border":"#378ADD","color":"#185FA5"},
-    ]},
-]
-
+            {"id":"CustomerC","label":"Customer C","abbr":"CC","bg":"#FBEAF0","border":"#D4537E","color":"#72243E"},
+            {"arrow":True,"amt":f"{a} deposit","note":"Bank Y"},
+            {"id":"Ybank","label":"Bank Y","abbr":"BY","bg":"#EAF3DE","border":"#1D9E75","color":"#3B6D11"},
+            {"arrow":True,"amt":f"{a} reserves","note":"settles"},
+            {"id":"Xbank","label":"Bank X","abbr":"BX","bg":"#E6F1FB","border":"#378ADD","color":"#185FA5"},
+            {"arrow":True,"amt":f"{a} deposit","note":"Bank X"},
+            {"id":"CustomerA","label":"Customer A","abbr":"CA","bg":"#FAEEDA","border":"#EF9F27","color":"#854F0B"},
+        ]
     elif sc_id == 8:
         return [
             {"id":"CentralBank","label":"Central Bank","abbr":"CB","bg":"#E1F5EE","border":"#1D9E75","color":"#0F6E56"},
@@ -446,15 +436,6 @@ def flow_html(nodes):
                 f'<div class="flow-note">{n.get("note","")}</div>'
                 f'</div>'
             )
-        elif n.get("pair"):
-            pair_html = "".join(
-            f'<div class="flow-node">'
-            f'<div class="flow-circle" style="background:{nd["bg"]};border-color:{nd["border"]};color:{nd["color"]};">{nd["abbr"]}</div>'
-            f'<div class="flow-node-lbl">{nd["label"]}</div>'
-            f'</div>'
-            for nd in n["nodes"]
-        )
-        parts.append(f'<div class="flow-pair">{pair_html}</div>')  
     return f'<div class="flow-row">{"".join(parts)}</div>'
 
 def bsheet_html(ek, state, active):
