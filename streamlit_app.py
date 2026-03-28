@@ -333,14 +333,12 @@ def build_flow(sc_id, amt):
         ]
     elif sc_id == 7:
         return [
-            {"id":"CustomerC","label":"Customer C","abbr":"CC","bg":"#FBEAF0","border":"#D4537E","color":"#72243E"},
-            {"arrow":True,"amt":f"{a} deposit","note":"Bank Y"},
-            {"id":"Ybank","label":"Bank Y","abbr":"BY","bg":"#EAF3DE","border":"#1D9E75","color":"#3B6D11"},
-            {"arrow":True,"amt":f"{a} reserves","note":"settles"},
-            {"id":"Xbank","label":"Bank X","abbr":"BX","bg":"#E6F1FB","border":"#378ADD","color":"#185FA5"},
-            {"arrow":True,"amt":f"{a} deposit","note":"Bank X"},
-            {"id":"CustomerA","label":"Customer A","abbr":"CA","bg":"#FAEEDA","border":"#EF9F27","color":"#854F0B"},
-        ]
+        {"id":"CustomerC","label":"Customer C","abbr":"CC","bg":"#FBEAF0","border":"#D4537E","color":"#72243E"},
+        {"id":"Ybank","label":"Bank Y","abbr":"BY","bg":"#EAF3DE","border":"#1D9E75","color":"#3B6D11"},
+        {"arrow":True,"amt":f"{a} deposits & reserves","note":""},
+        {"id":"Xbank","label":"Bank X","abbr":"BX","bg":"#E6F1FB","border":"#378ADD","color":"#185FA5"},
+        {"id":"CustomerA","label":"Customer A","abbr":"CA","bg":"#FAEEDA","border":"#EF9F27","color":"#854F0B"},
+    ]
     elif sc_id == 8:
         return [
             {"id":"CentralBank","label":"Central Bank","abbr":"CB","bg":"#E1F5EE","border":"#1D9E75","color":"#0F6E56"},
