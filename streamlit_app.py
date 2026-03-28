@@ -148,7 +148,7 @@ SCENARIOS = [
         "id": 1, "emoji": "✨",
         "title": "Bank X Creates Money — From Nothing!",
         "short": "Bank X grants Customer A a loan, writing new money into existence.",
-        "insight": "Banks don't lend existing money — they create brand new money when they make loans. This is called endogenous money creation. The economy grew from $0 with a single bookkeeping entry.",
+        "insight": "Banks don't lend existing money — they create brand new money when they make loans.  Bank X wrote <strong>two entries simultaneously</strong>: a <strong>loan</strong> on its asset side and a <strong>deposit</strong> on its liability side — both created from nothing at the same moment. Customer A now has brand new purchasing power. No vault was opened, no existing money moved. This is endogenous money creation.",
         "tag": "💚 Money Created", "tag_type": "green",
         "choice_type": "loan",
         "choice_opts": LOAN_OPTS,
