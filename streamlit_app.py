@@ -104,6 +104,13 @@ html, body, [class*="css"], .stApp {
 .bsheet-total { padding: 4px 9px; border-top: 0.5px solid rgba(0,0,0,0.08); display: flex; justify-content: space-between; font-size: 10px; font-weight: 700; background: #f7f7f5; }
 .t-a { color: #185FA5; }
 .t-l { color: #A32D2D; }
+            
+ .flow-pair {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}           
 
 .insight-bar { background: #EAF3DE; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #3B6D11; line-height: 1.6; margin: 4px 0 10px 0; }
 
@@ -438,6 +445,15 @@ def flow_html(nodes):
                 f'<div class="flow-note">{n.get("note","")}</div>'
                 f'</div>'
             )
+        elif n.get("pair"):
+            pair_html = "".join(
+            f'<div class="flow-node">'
+            f'<div class="flow-circle" style="background:{nd["bg"]};border-color:{nd["border"]};color:{nd["color"]};">{nd["abbr"]}</div>'
+            f'<div class="flow-node-lbl">{nd["label"]}</div>'
+            f'</div>'
+            for nd in n["nodes"]
+        )
+        parts.append(f'<div class="flow-pair">{pair_html}</div>')  
     return f'<div class="flow-row">{"".join(parts)}</div>'
 
 def bsheet_html(ek, state, active):
