@@ -344,7 +344,7 @@ def build_flow(sc_id, amt):
             {"id":"CentralBank","label":"Central Bank","abbr":"CB","bg":"#E1F5EE","border":"#1D9E75","color":"#0F6E56"},
             {"arrow":True,"amt":f"{a} each","note":"cash"},
             {"id":"Xbank","label":"Bank X","abbr":"BX","bg":"#E6F1FB","border":"#378ADD","color":"#185FA5"},
-            {"arrow":True,"amt":a,"note":""},
+            
             {"id":"Ybank","label":"Bank Y","abbr":"BY","bg":"#EAF3DE","border":"#1D9E75","color":"#3B6D11"},
         ]
     elif sc_id == 9:
