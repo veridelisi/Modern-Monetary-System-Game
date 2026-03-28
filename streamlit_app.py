@@ -169,7 +169,7 @@ SCENARIOS = [
         "id": 3, "emoji": "💳",
         "title": "Bank Y Creates a Loan for Customer C",
         "short": "Bank Y grants Customer C a loan — more new money!",
-        "insight": "Every bank creates money independently. Money supply doubled again — and we haven't moved a single coin or bill. Pure accounting.",
+        "insight": "Every bank creates money independently. Money supply increased again — and we haven't moved a single coin or bill. Pure accounting.",
         "tag": "💚 Money Created", "tag_type": "green",
         "choice_type": "loan",
         "choice_opts": LOAN_OPTS,
