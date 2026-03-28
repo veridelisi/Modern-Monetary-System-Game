@@ -301,17 +301,18 @@ def build_flow(sc_id, amt):
         ]
     elif sc_id == 2:
         return [
-        {"id":"CentralBank","label":"Central Bank","abbr":"CB","bg":"#E1F5EE","border":"#1D9E75","color":"#0F6E56"},
-        {"arrow":True,"amt":f"{a}","note":"reserves"},
-        {"id":"Xbank","label":"Bank X","abbr":"BX","bg":"#E6F1FB","border":"#378ADD","color":"#185FA5"},
-    ]
-
+            {"id":"CentralBank","label":"Central Bank","abbr":"CB","bg":"#E1F5EE","border":"#1D9E75","color":"#0F6E56"},
+            {"arrow":True,"amt":f"{a} each","note":"reserves"},
+            {"id":"Xbank","label":"Bank X","abbr":"BX","bg":"#E6F1FB","border":"#378ADD","color":"#185FA5"},
+            {"arrow":True,"amt":a,"note":"reserves"},
+            {"id":"Ybank","label":"Bank Y","abbr":"BY","bg":"#EAF3DE","border":"#1D9E75","color":"#3B6D11"},
+        ]
     elif sc_id == 3:
         return [
-        {"id":"CentralBank","label":"Central Bank","abbr":"CB","bg":"#E1F5EE","border":"#1D9E75","color":"#0F6E56"},
-        {"arrow":True,"amt":f"{a}","note":"reserves"},
-        {"id":"Ybank","label":"Bank Y","abbr":"BY","bg":"#EAF3DE","border":"#1D9E75","color":"#3B6D11"},
-    ]
+            {"id":"Ybank","label":"Bank Y","abbr":"BY","bg":"#EAF3DE","border":"#1D9E75","color":"#3B6D11"},
+            {"arrow":True,"amt":f"{a} loan","note":"creates ↗"},
+            {"id":"CustomerC","label":"Customer C","abbr":"CC","bg":"#FBEAF0","border":"#D4537E","color":"#72243E"},
+        ]
     elif sc_id == 4:
         return [
             {"id":"Xbank","label":"Bank X","abbr":"BX","bg":"#E6F1FB","border":"#378ADD","color":"#185FA5"},
