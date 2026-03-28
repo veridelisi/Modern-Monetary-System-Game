@@ -105,12 +105,12 @@ html, body, [class*="css"], .stApp {
 .t-a { color: #185FA5; }
 .t-l { color: #A32D2D; }
             
- .flow-pair {
+.flow-pair {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;   /* column değil row */
     align-items: center;
-    gap: 6px;
-}           
+    gap: 8px;
+}         
 
 .insight-bar { background: #EAF3DE; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #3B6D11; line-height: 1.6; margin: 4px 0 10px 0; }
 
@@ -346,10 +346,11 @@ def build_flow(sc_id, amt):
     ]},
     {"arrow":True,"amt":f"{a} deposits & reserves","note":""},
     {"pair": True, "nodes": [
-        {"id":"Xbank","label":"Bank X","abbr":"BX","bg":"#E6F1FB","border":"#378ADD","color":"#185FA5"},
         {"id":"CustomerA","label":"Customer A","abbr":"CA","bg":"#FAEEDA","border":"#EF9F27","color":"#854F0B"},
+        {"id":"Xbank","label":"Bank X","abbr":"BX","bg":"#E6F1FB","border":"#378ADD","color":"#185FA5"},
     ]},
 ]
+
     elif sc_id == 8:
         return [
             {"id":"CentralBank","label":"Central Bank","abbr":"CB","bg":"#E1F5EE","border":"#1D9E75","color":"#0F6E56"},
