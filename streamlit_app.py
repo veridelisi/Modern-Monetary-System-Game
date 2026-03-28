@@ -302,23 +302,16 @@ def build_flow(sc_id, amt):
     elif sc_id == 2:
         return [
         {"id":"CentralBank","label":"Central Bank","abbr":"CB","bg":"#E1F5EE","border":"#1D9E75","color":"#0F6E56"},
-        {"split": True, "branches": [
-            {
-                "amt": f"{a}","note":"reserves",
-                "node": {"id":"Xbank","label":"Bank X","abbr":"BX","bg":"#E6F1FB","border":"#378ADD","color":"#185FA5"}
-            },
-            {
-                "amt": f"{a}","note":"reserves",
-                "node": {"id":"Ybank","label":"Bank Y","abbr":"BY","bg":"#EAF3DE","border":"#1D9E75","color":"#3B6D11"}
-            },
-        ]}
+        {"arrow":True,"amt":f"{a}","note":"reserves"},
+        {"id":"Xbank","label":"Bank X","abbr":"BX","bg":"#E6F1FB","border":"#378ADD","color":"#185FA5"},
     ]
+
     elif sc_id == 3:
         return [
-            {"id":"Ybank","label":"Bank Y","abbr":"BY","bg":"#EAF3DE","border":"#1D9E75","color":"#3B6D11"},
-            {"arrow":True,"amt":f"{a} loan","note":"creates ↗"},
-            {"id":"CustomerC","label":"Customer C","abbr":"CC","bg":"#FBEAF0","border":"#D4537E","color":"#72243E"},
-        ]
+        {"id":"CentralBank","label":"Central Bank","abbr":"CB","bg":"#E1F5EE","border":"#1D9E75","color":"#0F6E56"},
+        {"arrow":True,"amt":f"{a}","note":"reserves"},
+        {"id":"Ybank","label":"Bank Y","abbr":"BY","bg":"#EAF3DE","border":"#1D9E75","color":"#3B6D11"},
+    ]
     elif sc_id == 4:
         return [
             {"id":"Xbank","label":"Bank X","abbr":"BX","bg":"#E6F1FB","border":"#378ADD","color":"#185FA5"},
@@ -442,30 +435,6 @@ def flow_html(nodes):
                 f'<div class="flow-note">{n.get("note","")}</div>'
                 f'</div>'
             )
-
-        elif n.get("split"):                          # <-- yeni blok
-            branch_html = ""
-            for b in n["branches"]:
-                nd = b["node"]
-                branch_html += (
-                    f'<div class="flow-branch">'
-                    f'<div class="flow-arrow">'
-                    f'<div class="flow-amt">{b["amt"]}</div>'
-                    f'<div class="flow-line"></div>'
-                    f'<div class="flow-note">{b.get("note","")}</div>'
-                    f'</div>'
-                    f'<div class="flow-node">'
-                    f'<div class="flow-circle" style="background:{nd["bg"]};border-color:{nd["border"]};color:{nd["color"]};">{nd["abbr"]}</div>'
-                    f'<div class="flow-node-lbl">{nd["label"]}</div>'
-                    f'</div>'
-                    f'</div>'
-                )
-            parts.append(f'<div class="flow-split">{branch_html}</div>')
-
-
-
-
-
     return f'<div class="flow-row">{"".join(parts)}</div>'
 
 def bsheet_html(ek, state, active):
