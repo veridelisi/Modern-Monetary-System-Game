@@ -213,7 +213,7 @@ SCENARIOS = [
         "id": 7, "emoji": "🔄",
         "title": "Customer C Pays Customer A (Cross-Bank!)",
         "short": "Customer C (Bank Y) sends money to Customer A (Bank X) — reserves must move!",
-        "insight": "Cross-bank payments require reserve transfers. A Bank Y deposit can't move to Bank X's ledger — only central bank reserves cross banks. This is why reserves matter.",
+        "insight": "Cross-bank payments require reserve transfers. This is why reserves matter.",
         "tag": "➡️ Transfer Only", "tag_type": "blue",
         "choice_type": "transfer",
         "choice_opts": TRANSFER_OPTS,
@@ -333,14 +333,16 @@ def build_flow(sc_id, amt):
         ]
     elif sc_id == 7:
         return [
-            {"id":"CustomerC","label":"Customer C","abbr":"CC","bg":"#FBEAF0","border":"#D4537E","color":"#72243E"},
-            {"arrow":True,"amt":f"{a} deposit","note":"Bank Y"},
-            {"id":"Ybank","label":"Bank Y","abbr":"BY","bg":"#EAF3DE","border":"#1D9E75","color":"#3B6D11"},
-            {"arrow":True,"amt":f"{a} reserves","note":"settles"},
-            {"id":"Xbank","label":"Bank X","abbr":"BX","bg":"#E6F1FB","border":"#378ADD","color":"#185FA5"},
-            {"arrow":True,"amt":f"{a} deposit","note":"Bank X"},
-            {"id":"CustomerA","label":"Customer A","abbr":"CA","bg":"#FAEEDA","border":"#EF9F27","color":"#854F0B"},
-        ]
+    {"pair": True, "nodes": [
+        {"id":"CustomerC","label":"Customer C","abbr":"CC","bg":"#FBEAF0","border":"#D4537E","color":"#72243E"},
+        {"id":"Ybank","label":"Bank Y","abbr":"BY","bg":"#EAF3DE","border":"#1D9E75","color":"#3B6D11"},
+    ]},
+    {"arrow":True,"amt":f"{a} deposits & reserves","note":""},
+    {"pair": True, "nodes": [
+        {"id":"Xbank","label":"Bank X","abbr":"BX","bg":"#E6F1FB","border":"#378ADD","color":"#185FA5"},
+        {"id":"CustomerA","label":"Customer A","abbr":"CA","bg":"#FAEEDA","border":"#EF9F27","color":"#854F0B"},
+    ]},
+]
     elif sc_id == 8:
         return [
             {"id":"CentralBank","label":"Central Bank","abbr":"CB","bg":"#E1F5EE","border":"#1D9E75","color":"#0F6E56"},
