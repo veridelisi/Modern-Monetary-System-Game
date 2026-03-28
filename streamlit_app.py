@@ -192,7 +192,7 @@ SCENARIOS = [
         "id": 5, "emoji": "📉",
         "title": "Customer B Repays Part of the Loan",
         "short": "Customer B repays part of the loan to Bank X — destroying money!",
-        "insight": "Just as loans create money, loan repayments destroy it. The money simply disappears from the balance sheet. This is debt deflation in miniature.",
+        "insight": "Customer B repaid only part of the loan — so only that portion is destroyed. <strong>The repaid amount is unwound from both sides simultaneously:</strong> Customer B's deposit shrinks, and Bank X's loan balance shrinks by the same amount. The rest of the loan — and the money it created — remains in existence. This is partial debt deflation: the economy shrank a little, but not all the way back. The remaining balance still represents money that Bank X keystroke'd into existence in Step 4.",
         "tag": "🔴 Money Destroyed", "tag_type": "red",
         "choice_type": "repay",
         "choice_opts": REPAY_OPTS,
