@@ -1,6 +1,7 @@
 import streamlit as st
 import plotly.graph_objects as go
 from copy import deepcopy
+import base64
 
 st.set_page_config(
     page_title="💰 Money Creation Game",
@@ -826,21 +827,16 @@ with col_chart:
         )
  
 
+    def get_base64_of_bin_file(bin_file):
+        with open(bin_file, 'rb') as f:
+            data = f.read()
+        return base64.b64encode(data).decode()
 
-
- 
-    import base64
-
-def get_base64_of_bin_file(bin_file):
-    with open(bin_file, 'rb') as f:
-        data = f.read()
-    return base64.b64encode(data).decode()
-
-try:
-    img_base64 = get_base64_of_bin_file("images/book.png")
-    img_html = f'data:image/png;base64,{img_base64}'
-except:
-    img_html = ""
+    try:
+        img_base64 = get_base64_of_bin_file("images/book.png")
+        img_html = f'data:image/png;base64,{img_base64}'
+    except:
+        img_html = ""
 
 st.markdown(
     f"""
